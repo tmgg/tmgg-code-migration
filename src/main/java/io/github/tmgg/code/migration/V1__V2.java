@@ -24,8 +24,10 @@ public class V1__V2 {
         javaMap.put("import io.tmgg.web.persistence.PersistEntity;", "import io.tmgg.data.domain.PersistEntity;");
         javaMap.put("import io.tmgg.web.persistence.StatField;", "import io.tmgg.data.query.StatField;");
         javaMap.put("import io.tmgg.web.persistence.StatType;", "import io.tmgg.data.query.StatType;");
+        javaMap.put("import io.tmgg.lang.validator.", "import io.tmgg.validator.");
+        javaMap.put("import io.tmgg.web.persistence.converter.", "import io.tmgg.data.converter.");
 
-
+        javaMap.put("extends BaseJob", "extends BaseJob");
 
         ProjectUtils.replace(FileType.java, javaMap);
 
