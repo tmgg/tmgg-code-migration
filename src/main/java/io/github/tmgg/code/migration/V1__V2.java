@@ -28,6 +28,12 @@ public class V1__V2 {
         javaMap.put("import io.tmgg.web.persistence.converter.", "import io.tmgg.data.converter.");
 
         javaMap.put("extends BaseJob", "extends BaseJob");
+        javaMap.put("saveOrUpdateByClient", "saveOrUpdateByRequest");
+        javaMap.put("deleteByClient", "deleteByRequest");
+        javaMap.put("findAllByClient", "findAllByRequest");
+        javaMap.put("findOneByClient", "findOneByRequest");
+
+
 
         ProjectUtils.replace(FileType.java, javaMap);
 
