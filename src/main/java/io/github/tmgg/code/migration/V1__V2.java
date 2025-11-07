@@ -36,6 +36,9 @@ public class V1__V2 {
         replaceMap.put("import io.tmgg.web.persistence.StatType;", "import io.tmgg.data.query.StatType;");
         replaceMap.put("import io.tmgg.lang.validator.", "import io.tmgg.validator.");
         replaceMap.put("import io.tmgg.web.persistence.converter.", "import io.tmgg.data.converter.");
+        replaceMap.put("import io.tmgg.flowable.listener.FormKeyDescription;", "import io.tmgg.flowable.definition.FormKeyDescription;");
+
+
 
         replaceMap.put("extends BaseJob", "extends BaseJob");
         replaceMap.put("saveOrUpdateByClient", "saveOrUpdateByRequest");
@@ -64,5 +67,10 @@ public class V1__V2 {
         }
         FileUtil.writeUtf8Lines(newLines, file);
 
+        String content = FileUtil.readUtf8String(file);
+        if(!content.contains("@ant-design/v5-patch-for-react")){
+            // "@ant-design/v5-patch-for-react-19": "^1.0.3"
+            throw new IllegalStateException("请手动添加 \"@ant-design/v5-patch-for-react-19\": \"^1.0.3\"");
+        }
     }
 }
