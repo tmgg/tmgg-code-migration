@@ -36,7 +36,7 @@ public class V1__V2 {
         replaceMap.put("import io.tmgg.web.persistence.StatType;", "import io.tmgg.data.query.StatType;");
         replaceMap.put("import io.tmgg.lang.validator.", "import io.tmgg.validator.");
         replaceMap.put("import io.tmgg.web.persistence.converter.", "import io.tmgg.data.converter.");
-        replaceMap.put("import io.tmgg.flowable.listener.FormKeyDescription;", "import io.tmgg.flowable.definition.FormKeyDescription;");
+        replaceMap.put("import io.tmgg.flowable.listener.", "import io.tmgg.flowable.definition.");
 
 
 
