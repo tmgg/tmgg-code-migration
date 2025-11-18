@@ -5,10 +5,7 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
 import io.github.tmgg.code.migration.utils.ProjectUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,7 +17,7 @@ public class Main {
     }
 
     private static void java() {
-        Map<String, String> replaceMap = new HashMap<>();
+        Map<String, String> replaceMap = new LinkedHashMap<>();
 
         String s = ResourceUtil.readUtf8Str("replace-java.txt").trim();
         List<String> lines = StrUtil.splitTrim(s, "\n");
