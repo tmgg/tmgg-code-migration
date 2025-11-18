@@ -1,0 +1,14 @@
+import io.tmgg.BasePackage;
+import io.admin.Build;
+
+BasePackage.class
+Build.class
+
+import io.tmgg.modules.job.BaseJob;
+import io.admin.modules.job.BaseJob;
+
+import io.tmgg.data.service.BaseService;
+import io.admin.framework.data.service.BaseService;
+
+import io.tmgg.lang.ann.Remark;
+import io.admin.common.utils.ann.Remark;
