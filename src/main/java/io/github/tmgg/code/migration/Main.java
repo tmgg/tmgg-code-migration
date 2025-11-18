@@ -23,10 +23,14 @@ public class Main {
         Map<String, String> replaceMap = new HashMap<>();
 
         String s = ResourceUtil.readUtf8Str("replace-java.txt").trim();
+        List<String> lines = StrUtil.splitTrim(s, "\n");
+        for (int i = 0; i < lines.size(); i++) {
+            String key = lines.get(i);
+            String value = lines.get(++i);
+            replaceMap.put(key, value);
+        }
 
 
-
-        System.out.println(s);
 
 
         ProjectUtils.replace(".java", replaceMap);
