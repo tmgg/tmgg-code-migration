@@ -30,9 +30,6 @@ public class Main {
             replaceMap.put(key, value);
         }
 
-
-
-
         ProjectUtils.replace(".java", replaceMap);
     }
 
