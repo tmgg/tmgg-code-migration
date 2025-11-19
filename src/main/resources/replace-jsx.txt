@@ -3,3 +3,6 @@
 
 @tmgg/tmgg-commons-lang
 @jiangood/springboot-admin-starter
+
+@tmgg/tmgg-system
+@jiangood/springboot-admin-starter

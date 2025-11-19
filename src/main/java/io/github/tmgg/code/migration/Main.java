@@ -16,6 +16,7 @@ import java.util.Map;
 public class Main {
 
     public static final String[] FILE_TYPES = {"java", "jsx"};
+    public static final String[] IGNORE = {"node_modules"};
 
     public static void main(String[] args) {
         System.out.println(getDir());
@@ -76,6 +77,10 @@ public class Main {
         List<File> files = FileUtil.loopFiles(dir, pathname -> pathname.getName().endsWith(fileType));
 
         for (File file : files) {
+            if(StrUtil.containsAny(file.getAbsolutePath(),IGNORE)){
+                continue;
+            }
+
             String content = FileUtil.readUtf8String(file);
             String newContent = content;
             for (Map.Entry<String, String> e : replaceMap.entrySet()) {
