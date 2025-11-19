@@ -83,7 +83,7 @@ public class Main {
             }
 
             if(!content.equals(newContent)){
-                System.out.println("修改文件 " + file.getName());
+                System.out.println("修改文件 " + file.getAbsolutePath());
                 FileUtil.writeUtf8String(newContent,file);
             }
         }
