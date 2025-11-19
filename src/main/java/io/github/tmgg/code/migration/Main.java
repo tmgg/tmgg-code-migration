@@ -19,6 +19,9 @@ public class Main {
     public static final String[] IGNORE = {"node_modules"};
 
     public static void main(String[] args) {
+        new Main().start();
+    }
+    public  void start() {
         System.out.println(getDir());
 
         for (String fileType : FILE_TYPES) {
@@ -35,11 +38,34 @@ public class Main {
         }
 
         pkg();
+        checkAdminUrl();
+    }
+
+    private  void checkAdminUrl() {
+        File dir = getDir();
+        List<File> files = FileUtil.loopFiles(dir, pathname -> pathname.getName().endsWith(".jsx"));
+
+        for (File file : files) {
+            if(StrUtil.containsAny(file.getAbsolutePath(),IGNORE)){
+                continue;
+            }
+
+            List<String> lines = FileUtil.readUtf8Lines(file);
+
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.contains("HttpUtil.") && !line.contains("admin/")) {
+                    System.err.println();
+                    System.err.println("请检查文件" + file.getAbsolutePath() + "第" + (i + 1) + "行:" + line + "HttpUtil请求的后台url应该以admin开头");
+                    System.err.println();
+                }
+            }
+
+        }
     }
 
 
-
-    private static void pkg() {
+    private  void pkg() {
         String file = getDir() + "/web/package.json";
         List<String> lines = FileUtil.readUtf8Lines(file);
 
@@ -62,7 +88,7 @@ public class Main {
             throw new IllegalStateException("请手动添加 \"@ant-design/v5-patch-for-react-19\": \"^1.0.3\"");
         }
     }
-    public static File getDir() {
+    public  File getDir() {
         Setting setting = SettingUtil.get("config");
         String dir = setting.get("dir");
         File file = new File(dir);
@@ -71,7 +97,7 @@ public class Main {
     }
 
 
-    public static void replace(String fileType, Map<String,String> replaceMap) {
+    public  void replace(String fileType, Map<String,String> replaceMap) {
         File dir = getDir();
 
         List<File> files = FileUtil.loopFiles(dir, pathname -> pathname.getName().endsWith(fileType));
