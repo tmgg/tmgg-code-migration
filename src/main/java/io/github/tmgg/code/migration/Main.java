@@ -54,9 +54,11 @@ public class Main {
 
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
-                if (line.contains("HttpUtil.") && !line.contains("admin/")) {
+                if (StrUtil.containsAny(line, "HttpUtil.", "<FieldSelect")&& !line.contains("admin/")) {
                     System.err.println("请检查文件" + file.getAbsolutePath() + "第" + (i + 1) + "行,HttpUtil请求的后台url应该以admin开头");
                 }
+
+
             }
 
         }
