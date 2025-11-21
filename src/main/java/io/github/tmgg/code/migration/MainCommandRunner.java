@@ -35,8 +35,8 @@ public class MainCommandRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         init();
+        start();
         invokeHandler();
-       start();
     }
 
     public void init() {
@@ -56,7 +56,7 @@ public class MainCommandRunner implements CommandLineRunner {
         for (Map.Entry<String, File> e : fileMap.entries()) {
             String key = e.getKey();
             File file = e.getValue();
-            log.info("处理文件 {}" , file.getAbsolutePath());
+
             List<String> lines = FileUtil.readUtf8Lines(file);
             for (FileHandler handler : handlers) {
                 if (handler.support(key)) {
@@ -66,6 +66,7 @@ public class MainCommandRunner implements CommandLineRunner {
                             FileUtil.writeUtf8String(newContent, file);
                         }
                     } catch (Exception ex) {
+                        log.info("处理文件失败 {}" , file.getAbsolutePath());
                         log.error(ex.getMessage());
                         System.exit(1);
                     }
