@@ -24,7 +24,7 @@ import java.util.Map;
 @Component
 public class MainCommandRunner implements CommandLineRunner {
 
-    public static final String[] FILE_TYPES = {"java", "jsx"};
+    public static final String[] FILE_TYPES = {"java", "jsx","js"};
     public static final String[] IGNORE = {"node_modules"};
 
     private final Multimap<String, File> fileMap = ArrayListMultimap.create();

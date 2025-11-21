@@ -1,0 +1,11 @@
+import {defaultConfig} from "@tmgg/tmgg-system/config/defaultConfig";
+import config from "@jiangood/springboot-admin-starter/config/dist/config";
+
+export default defineConfig(defaultConfig);
+export default defineConfig(config);
+
+import {defaultConfigLocal} from "@tmgg/tmgg-system/config/defaultConfig";
+import config from "@jiangood/springboot-admin-starter/config/dist/config.local";
+
+export default defineConfig(defaultConfigLocal);
+export default defineConfig(config);
