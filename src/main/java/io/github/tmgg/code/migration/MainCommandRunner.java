@@ -6,6 +6,13 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.Setting;
 import cn.hutool.setting.SettingUtil;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import io.github.tmgg.code.migration.handler.FileHandler;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,15 +20,62 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Main {
+@Slf4j
+@Component
+public class MainCommandRunner implements CommandLineRunner {
 
     public static final String[] FILE_TYPES = {"java", "jsx"};
     public static final String[] IGNORE = {"node_modules"};
 
-    public static void main(String[] args) {
-        new Main().start();
+    private final Multimap<String, File> fileMap = ArrayListMultimap.create();
+
+    @Resource
+    List<FileHandler> handlers;
+
+    @Override
+    public void run(String... args) throws Exception {
+        init();
+        invokeHandler();
+       start();
     }
-    public  void start() {
+
+    public void init() {
+        File dir = getDir();
+        for (String fileType : FILE_TYPES) {
+            List<File> files = FileUtil.loopFiles(dir, pathname -> pathname.getName().endsWith(fileType));
+            for (File file : files) {
+                if (StrUtil.containsAny(file.getAbsolutePath(), IGNORE)) {
+                    continue;
+                }
+                fileMap.put(fileType, file);
+            }
+        }
+    }
+
+    public void invokeHandler() {
+        for (Map.Entry<String, File> e : fileMap.entries()) {
+            String key = e.getKey();
+            File file = e.getValue();
+            log.info("处理文件 {}" , file.getAbsolutePath());
+            List<String> lines = FileUtil.readUtf8Lines(file);
+            for (FileHandler handler : handlers) {
+                if (handler.support(key)) {
+                    try {
+                        String newContent = handler.process(lines);
+                        if (newContent != null) {
+                            FileUtil.writeUtf8String(newContent, file);
+                        }
+                    } catch (Exception ex) {
+                        log.error(ex.getMessage());
+                        System.exit(1);
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void start() {
         System.out.println(getDir());
 
         for (String fileType : FILE_TYPES) {
@@ -34,38 +88,14 @@ public class Main {
                 String value = lines.get(++i);
                 replaceMap.put(key, value);
             }
-           replace(fileType, replaceMap);
+            replace(fileType, replaceMap);
         }
 
         pkg();
-        checkAdminUrl();
-    }
-
-    private  void checkAdminUrl() {
-        File dir = getDir();
-        List<File> files = FileUtil.loopFiles(dir, pathname -> pathname.getName().endsWith(".jsx"));
-
-        for (File file : files) {
-            if(StrUtil.containsAny(file.getAbsolutePath(),IGNORE)){
-                continue;
-            }
-
-            List<String> lines = FileUtil.readUtf8Lines(file);
-
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-                if (StrUtil.containsAny(line, "HttpUtil.", "<FieldSelect")&& !line.contains("admin/")) {
-                    System.err.println("请检查文件" + file.getAbsolutePath() + "第" + (i + 1) + "行,HttpUtil请求的后台url应该以admin开头");
-                }
-
-
-            }
-
-        }
     }
 
 
-    private  void pkg() {
+    private void pkg() {
         String file = getDir() + "/web/package.json";
         List<String> lines = FileUtil.readUtf8Lines(file);
 
@@ -88,22 +118,23 @@ public class Main {
             throw new IllegalStateException("请手动添加 \"@ant-design/v5-patch-for-react-19\": \"^1.0.3\"");
         }
     }
-    public  File getDir() {
+
+    public File getDir() {
         Setting setting = SettingUtil.get("config");
         String dir = setting.get("dir");
         File file = new File(dir);
-        Assert.state(file.exists(), "目录不存在");
+        Assert.state(file.exists(), "目录不存在" + dir);
         return file;
     }
 
 
-    public  void replace(String fileType, Map<String,String> replaceMap) {
+    public void replace(String fileType, Map<String, String> replaceMap) {
         File dir = getDir();
 
         List<File> files = FileUtil.loopFiles(dir, pathname -> pathname.getName().endsWith(fileType));
 
         for (File file : files) {
-            if(StrUtil.containsAny(file.getAbsolutePath(),IGNORE)){
+            if (StrUtil.containsAny(file.getAbsolutePath(), IGNORE)) {
                 continue;
             }
 
@@ -113,11 +144,12 @@ public class Main {
                 newContent = StrUtil.replace(newContent, e.getKey(), e.getValue());
             }
 
-            if(!content.equals(newContent)){
+            if (!content.equals(newContent)) {
                 System.out.println("修改文件 " + file.getAbsolutePath());
-                FileUtil.writeUtf8String(newContent,file);
+                FileUtil.writeUtf8String(newContent, file);
             }
         }
     }
+
 
 }
