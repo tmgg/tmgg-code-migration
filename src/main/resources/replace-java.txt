@@ -72,3 +72,10 @@ import io.admin.modules.system.service.SysOrgService;
 
 import io.tmgg.web.persistence.BaseController;
 import io.admin.framework.persistence.BaseController;
+
+
+findOneByRequest
+findByRequest
+
+findAllByRequest
+findPageByRequest
