@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class MainCommandRunner implements CommandLineRunner {
+public class CodeRunner implements CommandLineRunner {
 
     public static final String[] FILE_TYPES = {"java", "jsx","js"};
     public static final String[] IGNORE = {"node_modules"};
