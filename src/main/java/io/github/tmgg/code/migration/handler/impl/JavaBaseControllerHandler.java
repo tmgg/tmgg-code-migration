@@ -38,7 +38,7 @@ public class JavaBaseControllerHandler extends JavaHandler {
                                 JpaQuery<【替换大】> q = new JpaQuery<>();
                                 // 视情况修改
                                 q.likeExample(request);
-                                Page<【替换大】> page = service.pageByRequest(q, pageable);
+                                Page<【替换大】> page = service.findPageByRequest(q, pageable);
                                 return AjaxResult.ok().data(page);
                             }
                                             
