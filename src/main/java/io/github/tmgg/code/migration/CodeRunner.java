@@ -142,7 +142,13 @@ public class CodeRunner implements CommandLineRunner {
             String content = FileUtil.readUtf8String(file);
             String newContent = content;
             for (Map.Entry<String, String> e : replaceMap.entrySet()) {
-                newContent = StrUtil.replace(newContent, e.getKey(), e.getValue());
+                String old = e.getKey();
+                String newText = e.getValue();
+                if(StrUtil.contains(newContent, newText)){
+                    // 已经替换过了就不再替换，以免出现问题， 如 strUtil 替换为 strUtils， 多次运行出问题
+                    continue;
+                }
+                newContent = StrUtil.replace(newContent, old, newText);
             }
 
             if (!content.equals(newContent)) {
