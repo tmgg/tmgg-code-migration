@@ -113,11 +113,7 @@ public class CodeRunner implements CommandLineRunner {
         }
         FileUtil.writeUtf8Lines(newLines, file);
 
-        String content = FileUtil.readUtf8String(file);
-        if (!content.contains("@ant-design/v5-patch-for-react")) {
-            // "@ant-design/v5-patch-for-react-19": "^1.0.3"
-            throw new IllegalStateException("请手动添加 \"@ant-design/v5-patch-for-react-19\": \"^1.0.3\"");
-        }
+
     }
 
     public File getDir() {
